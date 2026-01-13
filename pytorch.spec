@@ -369,8 +369,8 @@ echo '// @generated' >> torch/csrc/jit/serialization/mobile_bytecode_generated.h
 
 # no cmake cuda locals
 mv -f  cmake/Modules_CUDA_fix/FindCUDNN.cmake cmake/Modules
-rm -rf cmake/Modules_CUDA_fix
-find . -type d -name "FindCUDA" -exec rm -rf {} \;
+#rm -rf cmake/Modules_CUDA_fix
+#find . -type d -name "FindCUDA" -exec rm -rf {} \;
 sed -i -e '/install/{:a;/COMPONENT/bb;N;ba;:b;/Modules_CUDA_fix/d;}' CMakeLists.txt
 sed -i -e 's|CMAKE_CUDA_FLAGS "-D|CMAKE_CUDA_FLAGS " -D|' CMakeLists.txt
 
@@ -400,8 +400,6 @@ sed -i '1i #include <algorithm>' aten/src/ATen/native/DispatchStub.cpp
 
 #python 3.x
 sed -i 's|${PYTHON_INCLUDE_DIR}|${PYTHON_INCLUDE_DIR}\n/usr/include/python%{python3_version}|' torch/CMakeLists.txt
-
-find cmake -name "select_compute_arch.cmake" -exec sed -i 's/\^(\[0-9\]\\./^([0-9]+\\./g' {} +
 
 %build
 # GCC14 issues ARM64
