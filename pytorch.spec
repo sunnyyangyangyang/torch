@@ -401,6 +401,7 @@ sed -i '1i #include <algorithm>' aten/src/ATen/native/DispatchStub.cpp
 #python 3.x
 sed -i 's|${PYTHON_INCLUDE_DIR}|${PYTHON_INCLUDE_DIR}\n/usr/include/python%{python3_version}|' torch/CMakeLists.txt
 
+find cmake -name "select_compute_arch.cmake" -exec sed -i 's/\^(\[0-9\]\\./^([0-9]+\\./g' {} +
 
 %build
 # GCC14 issues ARM64
