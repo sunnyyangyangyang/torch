@@ -26,7 +26,7 @@
 Name:           pytorch
 Version:        %(curl -s "https://raw.githubusercontent.com/pytorch/pytorch/%{schash0}/version.txt" | sed 's|.[a-z,A-Z]||')
 Release:        %{scdate0}.%{pkgvers}.git%{sshort0}.cu%{vcu_maj}_%{vcu_min}%{?dist}
-Summary:        PyTorch Neural Network Package 
+Summary:        PyTorch Neural Network Package
 License:        BSD
 
 URL:            https://pytorch.org
