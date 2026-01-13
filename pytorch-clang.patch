@@ -1,0 +1,48 @@
+diff --git a/aten/src/ATen/native/transformers/cuda/flash_attn/flash_api.cpp b/aten/src/ATen/native/transformers/cuda/flash_attn/flash_api.cpp
+index 4274ce3..6be3b62 100644
+--- a/aten/src/ATen/native/transformers/cuda/flash_attn/flash_api.cpp
++++ b/aten/src/ATen/native/transformers/cuda/flash_attn/flash_api.cpp
+@@ -447,7 +447,7 @@ mha_fwd(const at::Tensor &q,         // batch_size x seqlen_q x num_heads x head
+ 
+     // Otherwise the kernel will be launched from cuda:0 device
+     // Cast to char to avoid compiler warning about narrowing
+-    at::cuda::CUDAGuard device_guard{(char)q.get_device()};
++    at::cuda::CUDAGuard device_guard{static_cast<at::DeviceIndex>(q.get_device())};
+ 
+     auto opts = q.options();
+ 
+@@ -686,7 +686,7 @@ mha_varlen_fwd(const at::Tensor &q,  // total_q x num_heads x head_size, total_q
+ 
+     // Otherwise the kernel will be launched from cuda:0 device
+     // Cast to char to avoid compiler warning about narrowing
+-    at::cuda::CUDAGuard device_guard{(char)q.get_device()};
++    at::cuda::CUDAGuard device_guard{static_cast<at::DeviceIndex>(q.get_device())};
+ 
+     auto opts = q.options();
+ 
+@@ -928,7 +928,7 @@ mha_bwd(const at::Tensor &dout,  // batch_size x seqlen_q x num_heads, x head_si
+ 
+     // Otherwise the kernel will be launched from cuda:0 device
+     // Cast to char to avoid compiler warning about narrowing
+-    at::cuda::CUDAGuard device_guard{(char)q.get_device()};
++    at::cuda::CUDAGuard device_guard{static_cast<at::DeviceIndex>(q.get_device())};
+ 
+     auto opts = q.options();
+     auto softmax_d = at::empty({batch_size, num_heads, seqlen_q_rounded}, opts.dtype(at::kFloat));
+@@ -1152,7 +1152,7 @@ mha_varlen_bwd(const at::Tensor &dout,  // total_q x num_heads, x head_size
+ 
+     // Otherwise the kernel will be launched from cuda:0 device
+     // Cast to char to avoid compiler warning about narrowing
+-    at::cuda::CUDAGuard device_guard{(char)q.get_device()};
++    at::cuda::CUDAGuard device_guard{static_cast<at::DeviceIndex>(q.get_device())};
+ 
+     auto opts = q.options();
+     auto softmax_d = at::empty({batch_size, num_heads, seqlen_q_rounded}, opts.dtype(at::kFloat));
+@@ -1382,7 +1382,7 @@ mha_fwd_kvcache(at::Tensor &q,                 // batch_size x seqlen_q x num_he
+ 
+     // Otherwise the kernel will be launched from cuda:0 device
+     // Cast to char to avoid compiler warning about narrowing
+-    at::cuda::CUDAGuard device_guard{(char)q.get_device()};
++    at::cuda::CUDAGuard device_guard{static_cast<at::DeviceIndex>(q.get_device())};
+ 
+     auto opts = q.options();

@@ -1,0 +1,19 @@
+--- torch/CMakeLists.txt.python	2022-10-11 18:48:56.534889586 +0300
++++ torch/CMakeLists.txt	2022-10-11 18:52:32.368263631 +0300
+@@ -326,6 +328,16 @@ if(APPLE)
+       $<$<COMPILE_LANGUAGE:CXX>: -fvisibility=default>)
+ endif()
+ 
++add_library(_C SHARED ${TORCH_SRC_DIR}/csrc/stub.c)
++target_link_libraries(_C ${PYTHON_LIBRARIES} torch_python)
++target_compile_definitions(_C PRIVATE ${TORCH_PYTHON_COMPILE_DEFINITIONS})
++target_compile_options(_C PRIVATE ${TORCH_PYTHON_COMPILE_OPTIONS})
++target_include_directories(_C PUBLIC ${TORCH_PYTHON_INCLUDE_DIRECTORIES})
++set_target_properties(_C PROPERTIES PREFIX "")
++if (TORCH_PYTHON_LINK_FLAGS)
++    set_target_properties(_C PROPERTIES LINK_FLAGS "${TORCH_PYTHON_LINK_FLAGS}")
++endif()
++
+ if(CAFFE2_USE_MKL AND BUILD_LIBTORCHLESS)
+ 
+   # Use the RPATH of the linked libraries
